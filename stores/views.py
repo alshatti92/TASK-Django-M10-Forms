@@ -1,8 +1,10 @@
+from tkinter import S
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from stores import models
-from stores.forms import StoreItemForm
+from .forms import StoreItemForm
+from .models import StoreItem
 
 
 def get_store_items(request: HttpRequest) -> HttpResponse:
@@ -20,8 +22,27 @@ def create_store_item(request):
 
         if form.is_valid():
             form.save()
-            return redirect("store_item-list")
+            return redirect("store-item-list")
     context = {
         "form": form,
     }
     return render(request, "create_store_item.html", context)
+
+
+def update_store_item(request, item_id):
+    store_item = StoreItem.object.get(id=item_id)
+    form = StoreItemForm(instance=store_item)
+
+    if request.method == "POST":
+        form = StoreItemForm(request.POST, instance=store_item)
+        if form.is_valid():
+            form.save()
+            return redirect("store-item-list")
+
+    context = {
+
+        "store_item": store_item,
+        "form": form
+    }
+
+    return render(request, "update_store_item.html", context)

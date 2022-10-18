@@ -8,12 +8,9 @@
 </head>
 <body>
  <form action="{% url 'create-store-item' %}" method="POST"> 
- {% csrf_token %}
-{{ form }}
+ {% csrf_token %} {{ form }}
 
-<button type="submit" value="Create">
-
-</button>
-</form>  
+ <button type="submit" value="Create"> ADD </button>
+ </form>  
 </body>
 </html>
